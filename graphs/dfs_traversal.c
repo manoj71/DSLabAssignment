@@ -1,48 +1,86 @@
-//K.(a)Program for DFS traversal
-#include <stdio.h>
-#include <stdlib.h>
-int source,V,E,time,visited[20],G[20][20];
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct node
+{
+    struct node *next;
+    int vertex;
+}node;
+
+node *G[20];
+//heads of linked list
+int visited[20];
+int n;
+void read_graph();
+void insert(int,int);
+void DFS(int);
+
+void main()
+{
+    int i;
+    read_graph();
+	for(i=0;i<n;i++)
+        visited[i]=0;
+
+    DFS(0);
+}
+
 void DFS(int i)
 {
-    int j;
+    node *p;
+
+	printf(" %d",i);
+    p=G[i];
     visited[i]=1;
-    printf(" %d->",i+1);
-    for(j=0;j<V;j++)
+    while(p!=NULL)
     {
-        if(G[i][j]==1&&visited[j]==0)
-            DFS(j);
+       i=p->vertex;
+
+	   if(!visited[i])
+            DFS(i);
+        p=p->next;
     }
 }
-int main()
+
+void read_graph()
 {
-    int i,j,v1,v2;
-    printf("Graphs\n");
-    printf("Enter the no of edges:");
-    scanf("%d",&E);
-    printf("Enter the no of vertices:");
-    scanf("%d",&V);
-    for(i=0;i<V;i++)
-    {
-        for(j=0;j<V;j++)
-            G[i][j]=0;
-    }
-    //creating edges
-    for(i=0;i<E;i++)
-    {
-        printf("Enter the edges (format: V1 V2) : ");
-        scanf("%d%d",&v1,&v2);
-        G[v1-1][v2-1]=1;
+    int i,vi,vj,no_of_edges;
+    printf("Enter number of vertices:");
 
-    }
-
-    for(i=0;i<V;i++)
+	scanf("%d",&n);
+	for(i=0;i<n;i++)
     {
-        for(j=0;j<V;j++)
-            printf(" %d ",G[i][j]);
-        printf("\n");
+        G[i]=NULL;
+		printf("Enter number of edges:");
+       	scanf("%d",&no_of_edges);
+
+       	for(i=0;i<no_of_edges;i++)
+        {
+        	printf("Enter an edge(u,v):");
+			scanf("%d%d",&vi,&vj);
+			insert(vi,vj);
+        }
     }
-    printf("Enter the source: ");
-    scanf("%d",&source);
-        DFS(source-1);
-    return 0;
+}
+
+void insert(int vi,int vj)
+{
+    node *p,*q;
+
+	//acquire memory for the new node
+	q=(node*)malloc(sizeof(node));
+    q->vertex=vj;
+    q->next=NULL;
+
+    if(G[vi]==NULL)
+        G[vi]=q;
+    else
+    {
+        //go to end of the linked list
+        p=G[vi];
+
+		while(p->next!=NULL)
+        	p=p->next;
+        p->next=q;
+    }
 }
