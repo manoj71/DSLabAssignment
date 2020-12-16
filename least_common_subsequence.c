@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-
 int i, j, m, n, LCS_table[20][20];
 char S1[20],S2[20],b[20][20];
 int main() {
